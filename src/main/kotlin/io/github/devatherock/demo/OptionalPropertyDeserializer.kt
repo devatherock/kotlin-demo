@@ -1,4 +1,4 @@
-package io.github.devatherock.demo.io.github.devatherock.demo
+package io.github.devatherock.demo
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
