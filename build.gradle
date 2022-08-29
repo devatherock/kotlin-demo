@@ -1,16 +1,29 @@
 plugins {
     id "org.jetbrains.kotlin.jvm" version "1.6.21"
+    id "org.jetbrains.kotlin.plugin.spring" version "1.6.21"
+    id("org.springframework.boot") version "2.7.3"
+    id("io.spring.dependency-management") version "1.0.13.RELEASE"
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    def junitVersion = '5.8.2'
+group = "io.github.devatherock"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = '11'
 
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
+dependencies {
+    def springDocVersion = '1.6.11'
+
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: springDocVersion
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-kotlin', version: springDocVersion
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 
@@ -23,6 +36,7 @@ test {
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = '1.8'
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = '11'
     }
 }
