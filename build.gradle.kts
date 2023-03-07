@@ -30,3 +30,13 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "1.8"
     }
 }
+
+extra.apply {
+    set("buildVersion", "1.0.0")
+}
+
+tasks.register("readImageVersion") {
+     doLast {
+         file("image.version").appendText("""Version=${project.property("buildVersion")}""")
+     }
+}
