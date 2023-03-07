@@ -26,3 +26,13 @@ compileKotlin {
         jvmTarget = '1.8'
     }
 }
+
+ext {
+    buildVersion = '1.0.0'
+}
+
+task readImageVersion() {
+     doLast {
+         new File("image.version").text = "Version=${buildVersion}"
+     }
+}
