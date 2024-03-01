@@ -1,0 +1,56 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.9.22"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    def junitVersion = '5.8.2'
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'failed'
+    }
+}
+
+kotlin {
+    jvmToolchain(11)
+}
+
+task generateCode(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = "io.github.devatherock.CodeGenMain"
+    doFirst {
+        file("src/generated/kotlin").mkdirs()
+    }
+
+    dependsOn compileKotlin
+}
+
+sourceSets {
+    generated {
+        kotlin {
+            srcDir "src/generated/kotlin"
+        }
+        compileClasspath += main.output + configurations.runtimeClasspath
+        runtimeClasspath += main.output
+    }
+}
+
+kotlin.target.compilations.create("compileGeneratedKotlin") { it ->
+    it.source(sourceSets.generated)
+}
+tasks['compileGeneratedKotlin'].dependsOn(generateCode)
+
+jar {
+    dependsOn compileGeneratedKotlin
+    from sourceSets.main.output
+    from sourceSets.generated.output
+}

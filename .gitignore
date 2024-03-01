@@ -9,3 +9,4 @@ bin/
 .project
 out/
 .settings
+src/generated
