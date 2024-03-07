@@ -1,0 +1,48 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.6.21"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    def junitVersion = '5.8.2'
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
+}
+
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'failed'
+    }
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+configurations {
+    androidTestImplementation.extendsFrom implementation // or testImplementation
+    androidTestRuntime.extendsFrom runtime // or testRuntime
+}
+
+sourceSets {
+    androidTest {
+        kotlin.srcDir('src/androidTest/kotlin')
+        resources.srcDir(file('src/androidTest/resources'))
+
+        compileClasspath += main.output // + test.output
+        runtimeClasspath += main.output // + test.output
+    }
+}
+
+task androidTest(type: Test) {
+    testClassesDirs = sourceSets.androidTest.output.classesDirs
+    classpath = sourceSets.androidTest.runtimeClasspath
+}
